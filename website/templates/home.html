@@ -1,8 +1,44 @@
 {% extends 'base.html' %} {% block content %}
 
 {% if user.is_authenticated%}
+{% if records %}
+<div class="d-flex justify-content-between align-items-end">
+<h1>Records</h1>
+<br/>
+<div>
+<a class="btn btn-success btn" href="{%url 'add_record' %}">Add Record</a>
+</div>
 
-<h1> Hello World!</h1>
+</div>
+<br/>
+  <table class="table table-striped table-hover table align-middle">
+    <caption>User Records</caption>
+    <thead class="table-dark">
+      <tr>
+        <th scope="col">Id</th>
+        <th scope="col">Name</th>
+        <th scope="col">Email</th>
+        <th scope="col">Phone</th>
+        <th scope="col">Address</th>
+      </tr>
+    </thead>
+  {% for record in records %}
+    <tbody>
+      <tr>
+        <th><a class="text-decoration-none" href="{% url 'record' record.id %}">{{record.id}}</a></th>
+        <th scope="row">{{record.first_name}} {{record.last_name}}</th>
+        <td>{{record.email}}</td>
+        <td>{{record.phone_number}}</td>
+        <td>{{record.address}} {{record.city}} {{record.state}} {{record.zipcode}}</td>
+      </tr>
+    </tbody>
+  {% endfor %}
+</table>
+{% else %}
+<h5>No Records Found </h5>
+{% endif %}
+
+
 
 {% else %}
 
