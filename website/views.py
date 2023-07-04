@@ -7,11 +7,10 @@ from .models import UserRecords
 
 
 def home(request):
-
     user_records = UserRecords.objects.all()
     if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
+        username = request.POST.get('username', '')
+        password = request.POST.get('password', '')
         user = authenticate(request, username=username, password=password)
 
         if user is not None:
@@ -79,14 +78,15 @@ def delete_record(request, pk):
 def add_record(request):
     form = AddUserRecord(request.POST or None)
     if request.user.is_authenticated:
-        if request.method == 'POST':
+        if request.method == "POST":
             if form.is_valid():
                 add_record = form.save()
-                messages.success(request, 'Record Added...')
+                messages.success(request, "Record Added...")
                 return redirect('home')
         return render(request, 'add_record.html', {'form':form})
-    messages.success(request, 'You must Logged In...')
-    return redirect('home')
+    else:
+        messages.success(request, "You Must Be Logged In...")
+        return redirect('home')
 
 
 def update_record(request, pk):
